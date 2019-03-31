@@ -1,4 +1,8 @@
 package com.example.redistest.delayqueue.redis.v1;
 
-public class TaskState {
+public enum TaskState {
+
+    WAIT,
+    MOVED
+
 }
