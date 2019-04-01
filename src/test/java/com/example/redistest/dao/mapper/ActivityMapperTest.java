@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -22,7 +24,16 @@ public class ActivityMapperTest {
 
         Activity activity = activityDao.getActivity("123");
         System.out.println(activity);
-        assertEquals("test1", activity.getName());
+
+        activity.setName("test");
+        activityDao.updateActivity(activity);
+
+        System.out.println(activityDao.getActivity("123"));
+
+        activity.setId(UUID.randomUUID().toString());
+        activityDao.insertActivity(activity);
 
     }
+
+
 }

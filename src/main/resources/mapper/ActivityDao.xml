@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.redistest.dao.mapper.ActivityDao">
-    <select id="getActivity" resultType="com.example.redistest.dao.entity.Activity">
-        select * from activity where id=#activityId#
+
+    <resultMap id="activityMap" type="com.example.redistest.dao.entity.Activity">
+        <id column="id" property="id"/>
+        <id column="name" property="name"/>
+        <id column="state" property="state" javaType="com.example.redistest.dao.entity.ActivityState"
+            typeHandler="com.example.redistest.config.ActivityStateTypeHandler"/>
+        <id column="start_time" property="startTime" javaType="org.joda.time.DateTime"
+            typeHandler="com.example.redistest.config.DateTimeTypeHandler"/>
+        <id column="end_time" property="endTime" javaType="org.joda.time.DateTime"
+            typeHandler="com.example.redistest.config.DateTimeTypeHandler"/>
+        <id column="create_time" property="createTime" javaType="org.joda.time.DateTime"
+            typeHandler="com.example.redistest.config.DateTimeTypeHandler"/>
+        <id column="update_time" property="updateTime" javaType="org.joda.time.DateTime"
+            typeHandler="com.example.redistest.config.DateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertActivity" parameterType="com.example.redistest.dao.entity.Activity">
+        insert into activity(id, name, start_time, end_time)
+        values (#{id},
+                #{name},
+                #{startTime, typeHandler=com.example.redistest.config.DateTimeTypeHandler},
+                #{endTime, typeHandler=com.example.redistest.config.DateTimeTypeHandler}
+                )
+    </insert>
+
+    <update id="updateActivity" parameterType="com.example.redistest.dao.entity.Activity">
+        update activity set name=#{name}
+                            ,state=#{state, typeHandler=com.example.redistest.config.ActivityStateTypeHandler}
+                            ,start_time=#{startTime, typeHandler=com.example.redistest.config.DateTimeTypeHandler}
+                            ,end_time=#{endTime, typeHandler=com.example.redistest.config.DateTimeTypeHandler}
+                            ,update_time=#{updateTime, typeHandler=com.example.redistest.config.DateTimeTypeHandler}
+        where id=#{id}
+    </update>
+
+    <select id="getActivity" parameterType="String" resultMap="activityMap">
+        select * from activity where id=#{activityId}
     </select>
+
+    <select id="getActivities" resultType="com.example.redistest.dao.entity.Activity">
+        select * from activity
+    </select>
+
 </mapper>

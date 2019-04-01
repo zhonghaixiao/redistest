@@ -1,31 +1,39 @@
 package com.example.redistest.delayqueue.redis.v1;
 
 import com.alibaba.fastjson.JSON;
+import com.example.redistest.activity.service.ActivityService;
+import com.example.redistest.dao.entity.Activity;
 import com.example.redistest.redislock.locklib.DistributedLock;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Slf4j
+@Service
 public class RedisDelayQueueService {
 
     private JedisPool jedisPool;
 
     private ExecutorService executorService;
 
-    private HashSet<String> existWorkers;
+    private Map<String, WorkerCallback> workerCallbacks;
 
     private static final String QUEUE_NAME = "delayed-queue";
 
+    @Autowired
     public RedisDelayQueueService(JedisPool jedisPool){
         this.jedisPool = jedisPool;
         executorService = Executors.newCachedThreadPool();
-        existWorkers = new HashSet<>();
+        workerCallbacks = new ConcurrentHashMap();
         startPool();
     }
 
@@ -40,11 +48,11 @@ public class RedisDelayQueueService {
      * @param task
      * @param delayInMilli 延时执行的毫秒数
      */
-    public Boolean addDelayTask(Task task, long delayInMilli){
+    public Boolean addDelayTask(Task task, long delayInMilli, WorkerCallback callback){
         Jedis jedis = null;
         try {
-            if (!existWorkers.contains(task.getType())){
-                existWorkers.add(task.getType());
+            if (!workerCallbacks.containsKey(task.getType())){
+                workerCallbacks.put(task.getType(), callback);
                 executorService.submit(new WorkRunnable(jedisPool, task.getType()));
             }
             jedis = jedisPool.getResource();
@@ -166,7 +174,7 @@ public class RedisDelayQueueService {
 
         private JedisPool jedisPool;
 
-        private static final int DEFAULT_TIMEOUT = 10 * 1000;
+        private static final int DEFAULT_TIMEOUT = 60* 1000;
 
         public WorkRunnable(JedisPool jedisPool, String queueName){
             this.queueName = queueName;
@@ -183,10 +191,12 @@ public class RedisDelayQueueService {
                     List<String> tasks =  jedis.blpop(DEFAULT_TIMEOUT, queueName);
                     if (tasks != null){
                         System.out.println(Thread.currentThread().getName() + " 工作者" + queueName +"获取到任务 "+ tasks.size() +" ，开始执行。。。");
-                        for (int i = 0; i < tasks.size(); i++){
-                            Thread.sleep(20);
-                            System.out.println(Thread.currentThread().getName() + " 工作者" + queueName +"任务执行完成" + i);
-                        }
+                        System.out.println(tasks.get(0));
+                        Task task = JSON.parseObject(tasks.get(1), Task.class);
+                        System.out.println(task.getPayload());
+                        workerCallbacks.get(task.getType()).run(task.getPayload());
+                        System.out.println(Thread.currentThread().getName() + " 工作者" + queueName +"任务执行完成" + "(" + task + ")");
+
                     }
                 }
             }catch (Exception e){
