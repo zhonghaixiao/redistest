@@ -7,6 +7,7 @@ import com.example.redistest.delayqueue.redis.v1.RedisDelayQueueService;
 import com.example.redistest.delayqueue.redis.v1.Task;
 import com.example.redistest.delayqueue.redis.v1.TaskState;
 import com.example.redistest.delayqueue.redis.v1.WorkerCallback;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,8 @@ public class ActivityService {
                     , activity.getStartTime().getMillis() - System.currentTimeMillis()
                     , new WorkerCallback() {
                         @Override
-                        public void run(String activityId) {
-                            beginActivityByStartTime(activityId);
+                        public boolean run(String activityId) {
+                            return beginActivityByStartTime(activityId);
                         }
                     });
 
@@ -47,13 +48,13 @@ public class ActivityService {
                             .id(UUID.randomUUID().toString())
                             .type("endActivity")
                             .state(TaskState.WAIT)
-                            .executeMillis(activity.getStartTime().getMillis())
+                            .executeMillis(activity.getEndTime().getMillis())
                             .payload(activity.getId()).build()
                     , activity.getEndTime().getMillis() - System.currentTimeMillis()
                     , new WorkerCallback() {
                         @Override
-                        public void run(String activityId) {
-                            endActivityByEndTime(activityId);
+                        public boolean run(String activityId) {
+                            return endActivityByEndTime(activityId);
                         }
                     });
         }
@@ -63,12 +64,13 @@ public class ActivityService {
     public boolean beginActivityByStartTime(String activityId){
         Activity activity = activityDao.getActivity(activityId);
         if (activity != null){
-            if (activity.getStartTime().isBeforeNow()){
+            if (activity.getStartTime().isBeforeNow() || activity.getStartTime().isEqualNow()){
                 activity.setState(ActivityState.IN_PROGRESS);
                 int i = activityDao.updateActivity(activity);
                 return i == 1;
             }else{
-                throw new RuntimeException("当前task未开始");
+                System.out.println("当前task未开始");
+                return false;
             }
         }
         return false;
@@ -77,12 +79,15 @@ public class ActivityService {
     public boolean endActivityByEndTime(String activityId){
         Activity activity = activityDao.getActivity(activityId);
         if (activity != null){
-            if (activity.getEndTime().isBeforeNow()){
+            if (activity.getEndTime().isBeforeNow() || activity.getEndTime().isEqualNow()){
                 activity.setState(ActivityState.END);
                 int i = activityDao.updateActivity(activity);
                 return i == 1;
             }else{
-                throw new RuntimeException("当前task未结束");
+                System.out.println("activity = " + activity.getEndTime().getMillis());
+                System.out.println("current = " + DateTime.now().getMillis());
+                System.out.println("当前task未结束");
+                return false;
             }
         }
         return false;

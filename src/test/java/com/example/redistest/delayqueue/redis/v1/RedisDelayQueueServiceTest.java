@@ -38,7 +38,7 @@ public class RedisDelayQueueServiceTest {
                     .executeMillis(System.currentTimeMillis() +  (new Random().nextInt(8)) * 1000)
                     .build();
 
-            service.addDelayTask(task1, task1.getExecuteMillis() - System.currentTimeMillis(), (run)->{});
+            service.addDelayTask(task1, task1.getExecuteMillis() - System.currentTimeMillis(), (run)->{return true;});
         }
 
         Thread.sleep(100000);

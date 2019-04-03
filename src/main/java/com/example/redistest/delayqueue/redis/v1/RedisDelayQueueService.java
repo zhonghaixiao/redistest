@@ -194,7 +194,10 @@ public class RedisDelayQueueService {
                         System.out.println(tasks.get(0));
                         Task task = JSON.parseObject(tasks.get(1), Task.class);
                         System.out.println(task.getPayload());
-                        workerCallbacks.get(task.getType()).run(task.getPayload());
+                        boolean r = workerCallbacks.get(task.getType()).run(task.getPayload());
+                        if (!r){
+                            jedis.rpush(queueName, tasks.get(1));
+                        }
                         System.out.println(Thread.currentThread().getName() + " 工作者" + queueName +"任务执行完成" + "(" + task + ")");
 
                     }
