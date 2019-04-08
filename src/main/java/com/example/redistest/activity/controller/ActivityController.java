@@ -20,4 +20,9 @@ public class ActivityController {
         return Result.ok(activityDao.getActivity(activityId));
     }
 
+    @GetMapping("hello")
+    public Result hello(){
+        return Result.ok("hello");
+    }
+
 }

@@ -5,6 +5,12 @@
 
     <dubbo:application name="hello-world-app"/>
 
-    <dubbo:registry address="multicast://224.5.6.7:1234"/>
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+    <dubbo:protocol name="dubbo" port="20890"/>
+
+    <bean id="greetingService" class="com.example.redistest.dubbo.t1.GreetingServiceImpl"/>
+
+    <dubbo:service interface="com.example.redistest.dubbo.t1.GreetingService" ref="greetingService"/>
 
 </beans>
