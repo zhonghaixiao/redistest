@@ -32,26 +32,26 @@ public class BalanceTree<T extends Comparable<? super T>> {
         }
     }
 
-    private BinaryNode<T> LL(BinaryNode<T> t){
-        BinaryNode<T> q = t.left;
-        t.left = q.right;
-        q.right = t;
-        t = q;
-        t.height = Math.max(getHeight(t.left), )
-
-    }
-
-    private BinaryNode<T> LR(BinaryNode<T> t){
-
-    }
-
-    private BinaryNode<T> RR(BinaryNode<T> t){
-
-    }
-
-    private BinaryNode<T> RL(BinaryNode<T> t){
-
-    }
+//    private BinaryNode<T> LL(BinaryNode<T> t){
+//        BinaryNode<T> q = t.left;
+//        t.left = q.right;
+//        q.right = t;
+//        t = q;
+//        t.height = Math.max(getHeight(t.left), )
+//
+//    }
+//
+//    private BinaryNode<T> LR(BinaryNode<T> t){
+//
+//    }
+//
+//    private BinaryNode<T> RR(BinaryNode<T> t){
+//
+//    }
+//
+//    private BinaryNode<T> RL(BinaryNode<T> t){
+//
+//    }
 
     public void insert(BinaryNode<T> tree, T value){
 
