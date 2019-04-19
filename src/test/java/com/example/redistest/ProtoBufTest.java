@@ -1,5 +1,6 @@
 package com.example.redistest;
 
+import com.example.redistest.netty.testproto.ProtoDemo;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.junit.Test;
 

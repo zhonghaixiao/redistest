@@ -5,20 +5,24 @@ import java.util.concurrent.BlockingQueue;
 public class Producer implements Runnable {
 
     protected BlockingQueue queue;
-    public Producer(BlockingQueue queue){
+    private int value;
+
+    private static int id = 0;
+    private final String name;
+
+    public Producer(BlockingQueue queue, int value){
         this.queue = queue;
+        this.value = value;
+        this.name = "producer: [" + id++ + "]";
     }
 
     @Override
     public void run() {
         try{
-            queue.put(1);
-            Thread.sleep(1000);
-            queue.put(1);
-            Thread.sleep(1000);
-            queue.put(1);
-            Thread.sleep(1000);
-            queue.put(1);
+            while (true){
+                queue.put(name + " : " + value);
+                Thread.sleep(1000);
+            }
         }catch (InterruptedException e){
             e.printStackTrace();
         }

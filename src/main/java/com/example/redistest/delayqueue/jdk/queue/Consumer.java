@@ -12,9 +12,9 @@ public class Consumer implements Runnable{
 
     public void run() {
         try {
-            System.out.println(queue.take());
-            System.out.println(queue.take());
-            System.out.println(queue.take());
+            while (true){
+                System.out.println(queue.take());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
