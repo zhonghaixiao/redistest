@@ -1,0 +1,76 @@
+syntax = "proto3";
+//生成文件所在包名
+option java_package = "com.example.redistest";
+//生成的java文件名
+option java_outer_classname = "WorldClockProtocol";
+
+option optimize_for = SPEED;
+
+enum Continent{
+    AFRICA = 0;
+    AMERICA = 1;
+    ANTARCTICA = 2;
+    ARCTIC = 3;
+    ASIA = 4;
+    ATLANTIC = 5;
+    AUSTRALIA = 6;
+    EUROPE = 7;
+    INDIAN = 8;
+    MIDEAST = 9;
+    PACIFIC = 10;
+}
+
+message Location {
+    Continent continent = 1;
+    string city = 2;
+}
+
+message Locations {
+    repeated Location location = 1;
+}
+
+enum DayOfWeek {
+    SUNDAY = 0;
+    MONDAY = 1;
+    TUESDAY = 2;
+    WEDNESDAY = 3;
+    THURSDAY = 4;
+    FRIDAY = 5;
+    SATURDAY = 6;
+}
+
+message LocalTime {
+    uint32 year = 1;
+    uint32 month = 2;
+    uint32 dayOfMonth = 4;
+    DayOfWeek dayOfWeek = 5;
+    uint32 hour = 6;
+    uint32 minute = 7;
+    uint32 second = 8;
+}
+
+message LocalTimes {
+    repeated LocalTime localTime = 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
