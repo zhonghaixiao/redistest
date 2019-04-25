@@ -6,9 +6,18 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageDecoder extends ByteToMessageDecoder {
+
+    private Map<Byte, Class> messageMap;
+
+    public MessageDecoder(){
+        messageMap = new HashMap<>();
+        messageMap.put((byte)0x01, Message.class);
+    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
@@ -19,7 +28,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         int length = in.readInt();
         byte[] bytes = new byte[length];
         in.readBytes(bytes);
-        Message<Object> message = JSON.parseObject(bytes, Message.class);
+        BaseMessage message = JSON.parseObject(bytes, messageMap.get(cmd));
         out.add(message);
     }
 

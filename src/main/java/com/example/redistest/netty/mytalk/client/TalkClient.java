@@ -33,6 +33,7 @@ public class TalkClient {
             Message m = Message.builder().from("zhong").to("haixiao").body("hello world").build();
             while (true){
                 channel.writeAndFlush(m);
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
