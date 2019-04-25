@@ -9,8 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message<T> {
+public class Message<T> extends BaseMessage {
     private String from;
     private String to;
     private T body;
+
+    @Override
+    public byte getType() {
+        return PEER_TO_PEER;
+    }
 }

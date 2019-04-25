@@ -14,8 +14,8 @@ public class TestHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-//        System.out.println("get msg [" + i++ + "] : " + msg);
-//        ctx.channel().writeAndFlush(msg + "\r\n");
+        System.out.println("get msg [" + i++ + "] : " + msg);
+        ctx.channel().writeAndFlush(msg + "\r\n");
     }
 
     @Override
