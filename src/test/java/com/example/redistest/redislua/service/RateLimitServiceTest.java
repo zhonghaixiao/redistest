@@ -7,22 +7,37 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class RateLimitServiceTest {
+public class RateLimitServiceTest extends BaseJedisTest{
 
-    JedisPool jedisPool;
-
-    @Before
-    public void init(){
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(200);
-        jedisPoolConfig.setMaxWaitMillis(10000);
-        // 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
-        jedisPoolConfig.setBlockWhenExhausted(true);
-        jedisPool = new JedisPool(jedisPoolConfig, "localhost", 6379, 10000);
+    @Test
+    public void testScript1(){
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            Object r = jedis.eval(
+                    "return redis.pcall(\"get\", KEYS[1])",
+                    Arrays.asList("name1"), Arrays.asList("zhonghaixiao"));
+//            Object r = jedis.eval(
+//                    "local sumKey = 0;\n" +
+//                            "for i,v in ipairs(KEYS) do\n" +
+//                            "    sumKey = sumKey + tonumber(v)\n" +
+//                            "end\n" +
+//                            "return sumKey",
+//                    Arrays.asList("1","2","3"), Arrays.asList("4","5","6")
+//            );
+            System.out.println(r);
+            return ;
+        } finally {
+            if (jedis != null){
+                jedis.close();
+            }
+        }
     }
+
 
     @Test
     public void accessLimit() {
