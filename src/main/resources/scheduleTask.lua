@@ -26,3 +26,5 @@
 --    redis.call("EXPIRE", key, expire_time)
 --    return 1
 --end
+
+return redis.call("set", KEYS[1], ARGV[1])
