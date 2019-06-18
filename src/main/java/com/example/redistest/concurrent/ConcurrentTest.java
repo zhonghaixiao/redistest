@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public class ConcurrentTest {
@@ -14,7 +15,6 @@ public class ConcurrentTest {
     static ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public static void main(String[] args){
-
         int[] data = new int[]{1,2,3,4,5,6,7,8};
         int[] newData = Arrays.copyOf(data, 100);
         System.arraycopy(newData, 0, newData, 1, 1);
