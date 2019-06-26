@@ -1,12 +1,12 @@
 package com.example.redistest.rpctest.rpc2;
 
 import org.apache.zookeeper.*;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
-
 
 public class ServiceRegistry {
 
@@ -24,6 +24,7 @@ public class ServiceRegistry {
         if (data != null) {
             ZooKeeper zk = connectServer();
             if (zk != null) {
+                AddRootNode(zk); // Add root node if not exist
                 createNode(zk, data);
             }
         }
@@ -41,10 +42,26 @@ public class ServiceRegistry {
                 }
             });
             latch.await();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             LOGGER.error("", e);
         }
+        catch (InterruptedException ex){
+            LOGGER.error("", ex);
+        }
         return zk;
+    }
+
+    private void AddRootNode(ZooKeeper zk){
+        try {
+            Stat s = zk.exists(Constant.ZK_REGISTRY_PATH, false);
+            if (s == null) {
+                zk.create(Constant.ZK_REGISTRY_PATH, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        } catch (KeeperException e) {
+            LOGGER.error(e.toString());
+        } catch (InterruptedException e) {
+            LOGGER.error(e.toString());
+        }
     }
 
     private void createNode(ZooKeeper zk, String data) {
@@ -52,8 +69,11 @@ public class ServiceRegistry {
             byte[] bytes = data.getBytes();
             String path = zk.create(Constant.ZK_DATA_PATH, bytes, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
             LOGGER.debug("create zookeeper node ({} => {})", path, data);
-        } catch (KeeperException | InterruptedException e) {
+        } catch (KeeperException e) {
             LOGGER.error("", e);
+        }
+        catch (InterruptedException ex){
+            LOGGER.error("", ex);
         }
     }
 }
