@@ -16,8 +16,8 @@ public class Server {
         service.setApplication(new ApplicationConfig("first-dubbo-provider"));
 //        生成一个 RegistryConfig 实例，并将其装配进 ServiceConfig，这里使用的是组播方式，
 //        参数是 multicast://224.5.6.7:1234。合法的组播地址范围为：224.0.0.0 - 239.255.255.255
-//        service.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
-        service.setRegistry(new RegistryConfig("zookeeper://127.0.0.1:2181"));
+        service.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
+//        service.setRegistry(new RegistryConfig("zookeeper://127.0.0.1:2181"));
 //        将服务契约 GreetingsService 装配进 ServiceConfig。
         service.setInterface(GreetingService.class);
 //        将服务提供者提供的实现 GreetingsServiceImpl 的实例装配进 ServiceConfig。
