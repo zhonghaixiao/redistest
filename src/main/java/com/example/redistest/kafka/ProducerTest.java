@@ -4,7 +4,6 @@ package com.example.redistest.kafka;
 import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
-import java.util.concurrent.Future;
 
 public class ProducerTest {
 
@@ -22,9 +21,10 @@ public class ProducerTest {
         props.put("max.block.ms", 3000);
 
         Producer<String, String> producer = new KafkaProducer<>(props);
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; ; i++){
             int finalI = i;
-            Future f = producer.send(new ProducerRecord<>("test", Integer.toString(i), Integer.toString(i)), new Callback() {
+            producer.send(new ProducerRecord<>("test", Integer.toString(i),
+                    "message_" + Integer.toString(i)), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     if (e == null){
@@ -33,7 +33,7 @@ public class ProducerTest {
                 }
             });
         }
-        producer.close();
+//        producer.close();
     }
 
 }
