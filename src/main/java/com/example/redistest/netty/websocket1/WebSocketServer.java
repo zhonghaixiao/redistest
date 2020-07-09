@@ -48,7 +48,7 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 public final class WebSocketServer {
 
     static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8000"));
 
     public static void main(String[] args) throws Exception {
         // Configure SSL.
@@ -61,7 +61,7 @@ public final class WebSocketServer {
         }
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup(2);
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
