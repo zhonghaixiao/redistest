@@ -12,8 +12,8 @@ public class Client {
 //        生成一个 AplicatonConfig 的实例，并将其装配进 ReferenceConfig。
         reference.setApplication(new ApplicationConfig("first-dubbo-client"));
 //        生成一个 RegistryConfig 实例，并将其装配进 ReferenceConfig，注意这里的组播地址信息需要与服务提供方的相同。
-//        reference.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
-        reference.setRegistry(new RegistryConfig("zookeeper://127.0.0.1:2181"));
+        reference.setRegistry(new RegistryConfig("multicast://224.5.6.7:1234"));
+//        reference.setRegistry(new RegistryConfig("zookeeper://127.0.0.1:2181"));
 //        将服务契约 GreetingsService 装配进 ReferenceConfig。
         reference.setInterface(GreetingService.class);
 //        reference.setGeneric(true);

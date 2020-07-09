@@ -5,10 +5,14 @@ import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ProducerTest {
 
     public static void main(String[] args){
+//        FutureTask
+//        ReentrantLock
 
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");

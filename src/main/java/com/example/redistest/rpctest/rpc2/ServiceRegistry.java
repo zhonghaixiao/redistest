@@ -16,14 +16,14 @@ public class ServiceRegistry {
         this.registryAddress = registryAddress;
     }
 
-    public void register(String data){
-        if (data != null){
-            ZooKeeper zk = connectServer();
-            if (zk != null){
-                createNode(zk, data);
-            }
-        }
-    }
+//    public void register(String data){
+//        if (data != null){
+//            ZooKeeper zk = connectServer();
+//            if (zk != null){
+//                createNode(zk, data);
+//            }
+//        }
+//    }
 }
 
 
