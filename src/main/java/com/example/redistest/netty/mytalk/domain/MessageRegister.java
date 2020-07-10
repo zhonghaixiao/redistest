@@ -1,4 +1,4 @@
-package com.example.redistest.netty.mytalk.server;
+package com.example.redistest.netty.mytalk.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message<T> extends BaseMessage {
-    private String from;
-    private String to;
-    private T body;
+public class MessageRegister extends BaseMessage {
+    private String boxId;
+    private String ip;
+    private String mac;
 
     @Override
     public byte getType() {
-        return PEER_TO_PEER;
+        return REGISTER;
     }
 }

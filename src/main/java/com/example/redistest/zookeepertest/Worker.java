@@ -2,7 +2,6 @@ package com.example.redistest.zookeepertest;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-import scala.reflect.io.Path;
 
 import java.io.IOException;
 import java.util.Random;
